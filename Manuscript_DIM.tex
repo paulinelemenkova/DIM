@@ -1,0 +1,547 @@
+%% 
+%% Copyright 2007-2020 Elsevier Ltd
+%% 
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%% 
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%% 
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%% 
+%% Template article for Elsevier's document class `elsarticle'
+%% with harvard style bibliographic references
+
+\documentclass[preprint,12pt,authoryear]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times,authoryear]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
+%% \documentclass[final,3p,times,authoryear]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn,authoryear]{elsarticle}
+%% \documentclass[final,5p,times,authoryear]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn,authoryear]{elsarticle}
+
+%% For including figures, graphicx.sty has been loaded in
+%% elsarticle.cls. If you prefer to use the old commands
+%% please give \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+
+%--------------my packages ------------>
+\usepackage{float}
+\graphicspath{{figures/}} % path to folder with figures
+\usepackage{subcaption}
+\usepackage{rotating}
+\usepackage{dcolumn}
+\usepackage{tablefootnote}
+\usepackage{listings}
+\usepackage{xcolor}
+%\usepackage{gensymb} % for \textdegree
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{chngcntr}
+\counterwithin*{equation}{section}
+\usepackage[super]{nth}
+\usepackage{longtable}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{adjustbox}
+\graphicspath{{figures/}} % path to folder with figures
+%--------------my packages ------------<
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers.
+\usepackage{lineno}
+
+\journal{Data and Information Management}
+
+\begin{document}
+
+\begin{frontmatter}
+
+%% Title, authors and addresses
+
+%% use the tnoteref command within \title for footnotes;
+%% use the tnotetext command for theassociated footnote;
+%% use the fnref command within \author or \affiliation for footnotes;
+%% use the fntext command for theassociated footnote;
+%% use the corref command within \author for corresponding author footnotes;
+%% use the cortext command for theassociated footnote;
+%% use the ead command for the email address,
+%% and the form \ead[url] for the home page:
+%% \title{Title\tnoteref{label1}}
+%% \tnotetext[label1]{}
+%% \author{Name\corref{cor1}\fnref{label2}}
+%% \ead{email address}
+%% \ead[url]{home page}
+%% \fntext[label2]{}
+%% \cortext[cor1]{}
+%% \affiliation{organization={},
+%%            addressline={}, 
+%%            city={},
+%%            postcode={}, 
+%%            state={},
+%%            country={}}
+%% \fntext[label3]{}
+
+\title{Classification techniques in machine learning for image analysis in GRASS GIS}
+
+\author{Polina Lemenkova}
+\ead{polina.lemenkova2@unibo.it}
+
+\begin{abstract}
+The selection of methods for image processing and software functionality is crucial for monitoring Earth's landscapes. This work presents the use of Machine Learning (ML) methods for remote sensing (RS) data processing. The aim is to perform cartographic analysis of land cover changes with a case of central Apennines, Italy. Technically, we present a ML-based classification method using GRASS GIS software integrated with Python library Scikit-Learn. Image processing using ML and Artificial Neural Network (ANN) methods was investigated by employing the algorithms of GRASS GIS. The data are obtained from the USGS and include a time series of Landsat 8-9 OLI/TIRS satellite images. The operational workflow of image processing includes RS data processing. The images were classified into raster maps with automatically detected categories of land cover types. The approach was implemented by using a set of modules in scripting language of GRASS GIS, including for non-supervised classification used as training dataset of random pixel seeds, 'r.random', 'r.learn.train', 'r.learn.predict' and 'r.category' for ML part of image processing. The latter included following algorithms: Support Vector Machine, Multi-layer Perceptron Classifier of ANN, Decision Tree Classifier, and Random Forest. These classifiers were used to detect changes in land cover types derived from images. The results show different vegetation conditions in spring and autumn periods. Unlike the existing methods of image classification, ML considers the differences among the spectral reflectance of pixels when modelling topology of  patches. Other advantages are that ML uses data on texture and spectral features to measure the similarity of neighbouring landscape patches during the process of generating random decision trees.  This study demonstrated the benefits of ML for cartography, RS data processing and geoinformatics.
+\end{abstract}
+
+\begin{keyword}
+artificial neural network \sep decision tree \sep random forest \sep support vector machine \sep geospatial data
+\end{keyword}
+
+\end{frontmatter}
+
+\linenumbers
+
+%% The Appendices part is started with the command \appendix;
+%% appendix sections are then done as normal sections
+%% \appendix
+
+\section{Introduction}\label{Int}
+
+Recently, the use of machine learning (ML) has been in the centre of attention recently for the challenge of Earth observation data processing \cite{9395808,10041606,Lemenkova202320,8547145}. ML has become available approach in cartography along with the advances in programming and these methods are increasingly used in various tasks of environmental monitoring and mapping \cite{10142835,jimaging9050098,9850602}. The use of these tools ensures automation of satellite data processing, supports operative monitoring using time series and has an important effect on accuracy and effectiveness of data processing for cartographic visualization \cite{jmse12081279}. Thus, high level of automation in data processing achieved by ML approaches makes it possible to map land cover types rapidly using computer vision approaches applied to satellite images.
+
+The state-of-the-art methods of image classification in traditional GIS methods have certain limitations which can be summarised as follows. Firstly, since image classification is generally based on spectral reflectance of pixels, some cases may take place. This is cased by the ground properties of pixels which are not representing real land surface objects and strongly depend on the resolution of satellite images \cite{6351712,Lemenkova202322}. As a result, objects which have very similar spectral properties can be erroneously assigned to the same land cover class. Secondly, object topology is often avoided in when interpreting the imagery. To avoid this drawback, some studies analyse spatial relationships between the objects using Object Based Image Analysis (OBIA) techniques \cite{LUCIANO2019127,PHIRI2018170,DEWALI20233109,MAO202011}. 
+
+Nevertheless, this is a different approach that requires specific software and tools. Thirdly, the inherited properties of the land surface such as texture, curvature of patches, context of disposition of several objects representing the scene, shape, form and structure of objects is difficult to properly identified using the traditional image classification techniques in standard GIS \cite{OUSMANOU2024100239,ZHANG2023129590,BAKR2010592}. Moreover, increased variability of images with different properties and resolution require more advanced methods compared to the traditional approaches of image analysis that use pixel-based classification algorithms. This lead to the issues in accuracy and precision of image classification process \cite{Fisher,McKee}.
+
+In view of these limitations, the use of the novel ML methods for RS data processing and programming algorithms for classification approaches has recently drawn much attention \cite{Ayhan}. Among them, Python algorithms present a powerful instrument for image processing that have been investigated in a number of works \cite{9884244,9883588,Lemenkova202227,9006205,7724471}. The RF algorithm embedded in the mapping of crop fields using Landsat imagery was thoroughly described by \cite{LUCIANO2021106063}. \cite{AHMED201589} proposed an integrated application of the RF algorithm based on the multi-source data combining LiDAR and Landsat where connected components in the RS data are particularly well suited for complex forest canopy analysis using data on cover and height. Diverse examples of the RF algorithm applications in various cases of RS data processing include crop mapping for food and agricultural research \cite{OLIPHANT2019110,TELUGUNTLA2018325}, hazard risk assessment using fire mapping \cite{COLLINS2020111839}, urban sprawl analysis \cite{GHOSH201431} and environmental monitoring of land cover types \cite{MELVILLE201846,GRINAND201368}. 
+
+More research projects have demonstrated the potential of the RF approach of ML to image processing \cite{COLLINS2020111839,WEI2020112005,WANG202294}. Nevertheless, it still suffers from some limitations regarding its application in the GRASS GIS. For example, RF algorithm needs to be better exploited using GRASS GIS scripting modules in view of the current lack of a practical framework and hands-on applications in case studies. There have been limited case studies on the use of GRASS GIS using scripts for image processing in environmental applications \cite{STRIGARO201668,geomatics5010005,ROCCHINI2017166,7326254}. 
+
+In further examples, \cite{7326254} evaluated the use of GRASS GIS modules for marine geological mapping using MODIS/Aqua RS data in coastal areas. The approach presented by \cite{6407912} reports the links between GRASS GIS and Python and performs relatively well for environment monitoring using satellite imagery but the proper scripts of GRASS GIS are not reported since the major point was using Python for launching GRASS GIS. Moreover, few experimental studies have thoroughly evaluated the GRASS GIS modules for diverse ecological applications and mapping \cite{lemenkova2024exploitation}. However, the method of using RF by the GRASS GIS is not reported in the existing available works and needs evaluation. 
+
+\section{Materials and Methods}
+
+To classify RS data, two types of approaches were carried out. The first is unsupervised classification based on the MaxLike approach using 'i.cluster' and 'i.maxlik' and clustering which extracted Digital Numbers (DN) of cell feature based on spectral reflectance of signals. The second is supervised classification using several ML methods, technically realised using GRASS GIS scripts.
+
+%---------------------------->
+\subsection{Conceptual approach}
+The GIS that have included ML modules to select from perform better for image processing compared to simplified programs. Amongst the types of such available tools, Geographic Resources Analysis Support System (GRASS) GIS provides the options of ML for RS data processing that are based on the Python's library Scikit-Learn \cite{scikitlearn}. For instance, Random Forest (RF) learning classifier, linear classifiers that include Support Vector Machine (SVM), logistic regression and GradientBoostingClassifier can be used using GRASS GIS for satellite image processing. 
+
+These options are not only intended to advance the image processing workflow using powerful tools of Python embedded in GRASS GIS thus ensuring the quality and accuracy of image classification but also use a variety of mathematical approaches that can be finely tuned to diverse purposes of image processing. While GRASS GIS also has a wide variety of traditional modules for processing vector and raster types of geospatial data, such as tools for computations of land cover types, geomorphological and hydrological modelling or analytical data visualisations, these options differ in that they predominantly adjusted to cartographic data using internal modules rather than Python algorithms. 
+
+%---------------------------->
+\subsection{Workflow}
+The brief description of the workflow is as follows. After data import and preprocessing, the images were first classified using the 'MaxLike' approach of the unsupervised classification which uses clustering (Figure \ref{fig04}). The numerical results of the classification are stored using the 'reportfile' function which contains the statistical parameters of cluster classes obtained from the classified images, as follows: class size, separation, percent convergence, number of iterations, means and standard deviations for Landsat bands and class separability matrix. The training for the ML was obtained from the classification and applied as seed dataset. The standard and mean deviation of the partition were calculated and store din the .txt files for each image. Training cluster maps were computed for 10 classes of land cover types over the study area for each scene and used as training data for the ML approach. The outcomes are validated with computed reject threshold results using chi square test to determine levels of confidence of correctly classified pixels on raster scenes (Figure \ref{fig05}). Afterwards, the images were classified accordingly using four algorithms of ML (Figures \ref{fig06}, \ref{fig07}, \ref{fig08} and \ref{fig09}). Each Landsat scene of the 8 images comprising the dataset was processed and the maps were visualised using these data: images on 2018, 2019, 2022 and 2023 for spring and autumn periods accordingly. 
+
+%---------------------------->
+\subsection{Techniques}
+
+Several ML algorithms embedded in the GRASS GIS have been used in this study to classify Landsat 8-9 OLI/TIRS multispectral satellite images based on certain feature combinations. The area is covering the region of central Apennines in a regional scale. Four ML methods of image processing were employed including the following ones: 1) Support Vector Machine (SVM), 2) Multi-layer Perceptron (MLP) Classifier of the Artificial Neural Network (ANN), 3) Decision Tree Classifier (DTC), and 4) Random Forest (RF). These methods are based on different mathematical algorithms embedded in the GRASS GIS. We used these approaches for image classification to detect changes in land cover types over the study area in central Italy and map them during the 5-year period of 2018 to 2023. We tested these algorithms in order to compare them and define the appropriate classifier. Defining optimal classification approach supports the accurate discernibility of the land cover features, and to map the variability of landscapes over time.
+
+\subsection{Dataset}
+
+Major challenges facing a successful classification of the RS data are cloudiness of the satellite images, coverage, data availability and resolution which enable to accurately detect the changing features over the landscapes. Therefore, we selected the quality satellite data with low cloudiness and optimal coverage of the study region. Specifically, we used the moderate resolution multispectral satellite images obtained from the Landsat Collection Level-2. The essential characteristics and key feature attributes of the Landsat 8-9 OLI/TIRS images are summarised in the Table \ref{tab01}. These data are provided from the Landsat sensors 8-9 Operational Land Imager (OLI) and Thermal Infrared Sensor (TIRS). 
+
+These sensors provide the images of Earth's surface and present the collection of data suitable for monitoring landscape dynamics visible on the Earth's surface from space. Such images can be employed to evaluate trends in land cover changes over time when comparing multi-temporal datasets. Technically, the data were obtained from the United States Geological Survey (USGS) which presents a collection of the diverse geospatial datasets in the open source repository. The row/path of the Landsat swath is 30/191 for all the scenes, collected in Nadir. The images are projected automatically in the UTM Zone 33 for Italy in WGS84 Ellipsoid/Datum. 
+
+\subsection{Algorithms}
+
+The satellite image processing was performed using GRASS GIS software using the algorithms described below and adopted from the existing works \cite{Lemenkova202217,Lemenkova202313}. The details are given on both theoretical foundations (mathematical base) and practical implementation (essential snippets of scripts of GRASS GIS) of these methods.
+
+%---------------------------->
+\subsubsection{Maximum-likelihood discriminant analysis classifier}
+
+Theoretical base of the algorithm of maximum likelihood (MaxLike) estimation consists in the following. This method pursues the statistical and evaluation goals and is widely used in the remote sensing data analysis. This method aims at the estimating the probability pixels distribution in the dataset, that is, cells within the satellite image. This method  created opportunities to the pursuit of satellite image processing since it enables a straightforward approach to partition of pixels into groups using clusters of cells. Technically, it is done using data on DNs of the pixels that vary in values according to different land cover types (e.g., water, forest, urban areas, meadows etc, which have distinct spectral reflectance that can be recognised using computer vision algorithms. Similar spectral reflectance within the observed dataset are grouped into the same cluster and vice versa. The results of the MaxLike unsupervised classification were employed as seed training dataset for the ML algorithms which are described in the following subsections below.
+
+Practical implementation of this method in GRASS GIS consists in using 'i.cluster' and 'i.maxlik' modules as described in the technical script below. The results of the image processing performed using this method are presented in Figure \ref{fig04}. 
+
+\begin{footnotesize}
+\begin{verbatim}
+g.region raster=L_2019_01 -p
+i.group group=L_2019 subgroup=res_30m input=L_2019_01,<...>,L_2019_07
+# Clustering: generating signature file and report using k-means clustering algorithm
+i.cluster group=L_2019 subgroup=res_30m signaturefile=cluster_L_2019 
+  classes=10 reportfile=rep_clust_L_2019.txt --overwrite
+# Classification by i.maxlik module
+i.maxlik group=L_2019 subgroup=res_30m signaturefile=cluster_L_2019
+  output=L_2019_clusters reject=L_2019_cluster_reject
+r.colors L_2019_clusters color=roygbiv
+# Mapping
+g.region raster=L_2019_01 -p
+d.mon wx0
+d.vect isolines color='100:93:134' width=0
+d.rast L_2019_clusters
+d.grid -g size=00:30:00 color=grey width=0.1 fontsize=16 text_color=grey
+d.legend raster=L_2019_clusters title="Clusters 2019" title_fontsize=19 font="Helvetica" \
+	fontsize=17 bgcolor=white border_color=white
+d.out.file output=Italy_2019 format=jpg --overwrite
+\end{verbatim}
+\end{footnotesize}
+
+%---------------------------->
+\subsubsection{Accuracy assessment}
+
+The uncertainty in image classification associated to the distribution of pixels to target land cover classes within the datasets analysed in this work might affect the overall results of mapping. Since this is related to monitoring habitat and vegetation over time, spatial uncertainty should be estimated to avoid biased conclusions. In GRASS GIS, a solution evaluate accuracy is proposed by the chi square test which plots the reject raster map which demonstrates the reject threshold results. The aim is to determine the confidence level at which each cell is categorised correctly and accurately assigned to the correct land cover class. It is the reject threshold map layer, and contains the index to one calculated confidence level for each classified cell in the classified image. The confidence intervals are predefined with the reject map interpreted as values starting from the lowest rejection level (0\% = keep, i.e., the pixels are classified correctly) to the highest (100\% = reject, i.e., low probability of the correctness of the pixel assigned to the target class).Technically, the estimation of accuracy is performed using the scripts presented below. This algorithm applies the chi square test on each discriminant result at various threshold levels of confidence. 
+
+\begin{footnotesize}
+\begin{verbatim}
+# Mapping rejection probability
+d.mon wx1
+g.region raster=L_2019_clusters -p
+r.colors L_2019_cluster_reject color=soilmoisture -e
+d.rast L_2019_cluster_reject
+d.grid -g size=00:30:00 color=grey width=0.1 fontsize=16 text_color=grey
+d.legend raster=L_2019_cluster_reject title="2019" title_fontsize=19 \
+	font="Helvetica" fontsize=17 bgcolor=white border_color=white
+d.out.file output=Italy_2019_reject format=jpg
+\end{verbatim}
+\end{footnotesize}
+
+%---------------------------->
+\subsubsection{RandomForestClassifier}
+
+The RandomForestClassifier (RF Classifier) used for image processing in GRASS GIS belong to the group of Machine Learning (ML) algorithms initially developed by Tin Kam Ho in 1995 \cite{598994}. Random Forest became a well established method of data complexity analysis among ML algorithms \cite{990132}. The essential of the RandomForestClassifier ML ensemble learning approach is that it generates a randomised multitude of decision trees during the process of training while processing the images. More specifically, it uses the training set of classified pixels and builds each tree in the ensemble from this sample with a replacement by introducing randomness in the classification workflow. In image processing, the training algorithm of RF uses the approach of bootstrap aggregating to analyses of pixels. Specifically in GRASS GIS, the following script with defined parameters was has been applied to use RF algorithm for satellite image processing: 
+
+\begin{footnotesize}
+\begin{verbatim}
+r.learn.train group=L_2019 training_map=training_pixels model_name=RandomForestClassifier \
+    n_estimators=500 save_model=rf_model.gz --overwrite
+# perform prediction using r.learn.predict
+r.learn.predict group=L_2019 \
+	load_model=rf_model.gz output=rf_classification --overwrite
+# display
+r.colors rf_classification color=bcyr -e
+d.mon wx0
+d.rast rf_classification
+d.grid -g size=00:30:00 color=grey width=0.1 fontsize=16 text_color=grey
+d.legend raster=rf_classification title="RF 2019" title_fontsize=19 font="Helvetica" \
+fontsize=17 bgcolor=white border_color=white
+d.out.file output=RF_2019 format=jpg --overwrite
+\end{verbatim}
+\end{footnotesize}
+
+%---------------------------->
+\subsubsection{SVC Classifier}
+
+The Support Vector Classification (SVC Classifier) is a branch of the Support Vector Machines (SVM) which are a set of supervised learning methods \cite{Cortes}. The main approach of the SVM for remote sensing data processing is classifying the new satellite data into one or two given classes using the decision process which tracks the largest separation, i.e., margin, between the given classes. Hence, the best separation is obtain using the discrimination of the location of the samples within the finite-dimensional space of dataset, and detected largest distance to the nearest training sample of one of these classes. The algorithm of SVC embedded in the GRASS GIS solves this problem through the maximisation of margins of the sample classes within each satellite image by analysing the Digital Numbers (DN) of pixels on the raster scene and inverse regularisation parameter. 
+
+The resulting output of the classification assigns the predicted class to its sign and the support vectors are summarised using attributes of the classification. Such effective approach has a memory-efficient performance since it utilises a set of training points as decision function, i.e., support vectors which optimises the use of computational facilities of the machine. Moreover, the flexibility of this algorithms is caused by the possibility to adjust the model using different Kernel functions defined which includes both common and custom kernels. Specifically in GRASS GIS, the following scripts. Specifically, the algorithm was used for applying the SVM for image processing and performing prediction using 'r.learn.predict module and training a SVC model using r.learn.train:
+
+\begin{footnotesize}
+\begin{verbatim}
+r.learn.train group=L_2023a training_map=training_pixels model_name=SVC n_estimators=500 \
+save_model=svc_model.gz 
+r.learn.predict group=L_2023a load_model=svc_model.gz output=svc_classification --overwrite
+r.colors svc_classification color=bgyr -e
+d.mon wx0
+d.rast svc_classification
+d.grid -g size=00:30:00 color=grey width=0.1 fontsize=16 text_color=grey
+d.legend raster=svc_classification title="SVM 2023" title_fontsize=19 font="Helvetica" fontsize=17 \
+bgcolor=white border_color=white
+d.out.file output=SVM_2023 format=jpg --overwrite
+\end{verbatim}
+\end{footnotesize}
+
+%---------------------------->
+\subsubsection{DecisionTree Classifier}
+
+The DecisionTree (DTC) Classifier is derived from the Scikit-Learn Library of Python and is generally based on the supervised learning algorithm. It is considered among one of the most intuitive classifiers which implies the probabilistic approach and normal distribution of the data and straightforward implementation. The likelihood of the pixels assigned to each land cover class during image partition which partitions the pixels in the images according to the decision rule which evaluates the suitability of pixels into a target class of land cover types. For remote sensing approach, the estimation of correctness is computed using the approach of splitting the raster dataset into the group categories of pixels where each pixel is defined to be suitable to this specific cluster or not according to the spectral reflectance value. Thus, the algorithm of DecisionTree Classifier computes the probability likelihood of the features representing the land cover types on the Earth. This assumes the independence between every pair of pixels and considers the value of cells assigned to each class of the classified satellite image as variables. In GRASS GIS the algorithm was realised using the following code:
+
+\begin{footnotesize}
+\begin{verbatim}
+# train a DTC model using r.learn.train
+r.learn.train group=L_2023a training_map=training_pixels model_name=DecisionTreeClassifier \
+n_estimators=500 save_model=dtc_model.gz
+# perform prediction using r.learn.predict
+r.learn.predict group=L_2023a load_model=dtc_model.gz output=dtc_classification --overwrite
+r.colors dtc_classification color=plasma -e
+d.mon wx0
+d.rast dtc_classification
+d.grid -g size=00:30:00 color=grey width=0.1 fontsize=16 text_color=grey
+d.legend raster=dtc_classification title="DTC 2023" \
+	title_fontsize=19 font="Helvetica" fontsize=17 bgcolor=white border_color=white
+d.out.file output=DTC_2023 format=jpg --overwrite
+\end{verbatim}
+\end{footnotesize}
+
+%---------------------------->
+\subsubsection{MLPClassifier}
+
+MLPClassifier is a Multi-layer Perceptron classifier derived from the Scikit-Learn Library of Python and is based on fundamentals of predictive learning \cite{Rosenblatt}. The performance of the MLPC differs from the GaussianNB approach since it uses the principle of feedforward Artificial Neural Network (ANN). For data analysis, ANN uses three layers that are used as structures of network topology in a flow of information for data partition. The input, hidden and output layer consist of nodes (i.e., pixels of raster layer) which train the model using supervised learning. The practical solution of GRASS GIS to use the MLPC ANN algorithms consists in using the following script where the name of the model is explicitly defined as MLPClassifier (below an example for the image on 2022, autumn): 
+
+\begin{footnotesize}
+\begin{verbatim}
+r.learn.train group=L_2022a training_map=training_pixels model_name=MLPClassifier n_estimators=500 \
+    save_model=mlpc_model.gz --overwrite
+# perform prediction using r.learn.predict
+r.learn.predict group=L_2022a load_model=mlpc_model.gz output=mlpc_classification --overwrite
+# display
+r.colors mlpc_classification color=inferno -e
+d.mon wx0
+d.rast mlpc_classification
+d.grid -g size=00:30:00 color=grey width=0.1 fontsize=16 text_color=grey
+d.legend raster=mlpc_classification title="ANN 2022" title_fontsize=19 font="Helvetica" fontsize=17 bgcolor=white border_color=white
+d.out.file output=MLPC_2022 format=jpg --overwrite
+\end{verbatim}
+\end{footnotesize}
+
+The results of the MLPClassifer applied to eight Landsat images covering the region of central Apennines including Foreste Casentinesi National Park are presented in Figure \ref{fig09}.
+
+\section{Results}
+
+The cartographic visualization of the images processed with four methods is presented in the figures above. The land cover types in the northern Italy were identified as following 10 classes according to the existing adopted, modified and generalised classification schemes \cite{DeFioravante}: 1) urban areas, 2) arable lands and agricultural fields, 3) water areas, 4) needle-leaved trees, 5) bare lands and soils; 6) pastures; 7) permanent herbaceous vegetation; 8) croplands; 9) broadleaved trees; 10) shrubland. 
+
+Among the compared outputs regarding the classified images using algorithms of Support Vector Machine (SVM), Multi-layer Perceptron (MLP) Classifier of the Artificial Neural Network (ANN), Decision Tree Classifier (DTC), and Random Forest (RF), the following remarks can be provided. The Random Forest (Figure \ref{fig01}) and SVC Classifiers (Figure \ref{fig02}) differ from the  and Decision Tree (Figure \ref{fig03}) and ANN approaches (Figure \ref{fig04}), due to the different methods in identifying cells within the raster scenes (MLP of ANN and DTC). Hence, the maps generated using SVM method (Figure \ref{fig02}, a) are comparable with those based on the RF Classifier, while MLP Classifier presented a more generalised map (Figure \ref{fig04} using deep learning network approach. 
+
+\begin{figure}[H]
+\hspace{10pt}\makebox[0.99\linewidth][r]{%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_01a.jpg}
+		\caption{20 April 2018}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_01b.jpg}
+		\caption{22 March 2019}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_01c.jpg}
+		\caption{14 March 2022}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_01d.jpg}
+		\caption{17 March 2023}
+	\end{subfigure}%
+}\\
+\vfill \vspace{0.2mm}
+\hspace{10pt}\makebox[0.99\linewidth][r]{%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_01e.jpg}
+		\caption{27 September 2018}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_01f.jpg}
+		\caption{14 September 2019}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_01g.jpg}
+		\caption{6 September 2022}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_01h.jpg}
+		\caption{3 October 2023}
+	\end{subfigure}%
+}
+\caption{Time series of the multispectral images classified using Random Forest (RF) algorithm.}
+\label{fig01}
+\end{figure}
+
+Being one of the most efficient inductive learning algorithms of ML in data science in general and remote sensing in particular, SVM has advantages in the classification performances among the ML algorithms due to the effects of dependence distribution of nodes within classes and integrated dependence of all nodes. In this way, it works similar to the Naïve Bayes approach. Hence, SVM is optimal for classification of images where the dependences distribute evenly in classes which is excellently suits to the homogeneous types of landscapes with diversified land cover classes. However, this approach is not optimised for images with high landscape heterogeneity and contrasting landscape types (e.g., sharp gradient between the coastal and mountainous areas).
+
+The advantages of SVM (Figure \ref{fig02} can be explained by its effectivity in high dimensional datasets which is valuable for satellite images that consists thousands of pixels as cells. In our case, 8 multispectral images were classified automatically for each band of Landsat 8-9 OLI/TIRS scenes with 30-m resolution. The target periods cover spring and autumn periods with different vegetation types. Each raster image of the Landsat image contained 7911 rows and 7762 columns of cells, therefore, the automatic approach of processing there data was essential to ensure rapid and accurate data handling. 
+
+\begin{figure}[H]
+\hspace{10pt}\makebox[0.99\linewidth][r]{%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_02a.jpg}
+		\caption{20 April 2018}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_02b.jpg}
+		\caption{22 March 2019}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_02c.jpg}
+		\caption{14 March 2022}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_02d.jpg}
+		\caption{17 March 2023}
+	\end{subfigure}%
+}\\
+\vfill \vspace{0.2mm}
+\hspace{10pt}\makebox[0.99\linewidth][r]{%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_02e.jpg}
+		\caption{27 September 2018}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_02f.jpg}
+		\caption{14 September 2019}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_02g.jpg}
+		\caption{6 September 2022}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_02h.jpg}
+		\caption{3 October 2023}
+	\end{subfigure}%
+}
+\caption{Time series of the multispectral images classified using Support Vector Machine (SVM) algorithm.}\label{fig02}
+\end{figure}
+
+More specifically, the SVM presents high search accuracy compared to other algorithms after a few iterations. Besides, using SVM is supportive for time series analysis where several satellite images are compared since this method is effective when number of dimensions is larger than samples. This is particular valuable for detecting complex land cover patterns in the regions of central Apennines with high heterogeneity of landscapes, such as mixed areas with urban areas and natural spaces. 
+
+Following SVM, the RF classifier also presented optimal results of classification compared to the other approaches in the presented maps. Its superiority is explained by the tuned optimization of the image classification. In the case of RF, using the parameter tuning in GRASS GIS, each node is being split during the construction of a tree with the best split found either from all input pixels of the image or a randomised subset depending on the resolution and extent of the training dataset of the image which depends on the study area and heterogeneity of the visualised landscapes. This randomness aims at decreasing the variance of the RF estimator which allows to overcome overfitting of the individual decision trees with high variance in case of heterogeneous landscapes typical for the Foreste Casentinesi National Park area. The artificially increased randomness of the RF algorithm enables either to decrease the prediction errors of the decision trees or cancel them out, thus making image classification more accurate. 
+
+\begin{figure}[H]
+\hspace{10pt}\makebox[0.99\linewidth][r]{%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_03a.jpg}
+		\caption{20 April 2018}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_03b.jpg}
+		\caption{22 March 2019}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_03c.jpg}
+		\caption{14 March 2022}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_03d.jpg}
+		\caption{17 March 2023}
+	\end{subfigure}%
+}\\
+\vfill \vspace{0.2mm}
+\hspace{10pt}\makebox[0.99\linewidth][r]{%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_03e.jpg}
+		\caption{27 September 2018}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_03f.jpg}
+		\caption{14 September 2019}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_03g.jpg}
+		\caption{6 September 2022}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_03h.jpg}
+		\caption{3 October 2023}
+	\end{subfigure}%
+}
+\caption{Time series of the multispectral images classified using DecisionTree algorithm}\label{fig03}
+\end{figure}
+
+\begin{figure}[H]
+\hspace{10pt}\makebox[0.99\linewidth][r]{%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_04a.jpg}
+		\caption{20 April 2018}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_04b.jpg}
+		\caption{22 March 2019}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_04c.jpg}
+		\caption{14 March 2022}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.99\textwidth]{Fig_04d.jpg}
+		\caption{17 March 2023}
+	\end{subfigure}%
+}\\
+\vfill \vspace{0.2mm}
+\hspace{10pt}\makebox[0.99\linewidth][r]{%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_04e.jpg}
+		\caption{27 September 2018}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_04f.jpg}
+		\caption{14 September 2019}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_04g.jpg}
+		\caption{6 September 2022}
+	\end{subfigure}%
+	\begin{subfigure}[b]{.25\textwidth}
+		\centering
+			\includegraphics[width=0.98\textwidth]{Fig_04h.jpg}
+		\caption{3 October 2023}
+	\end{subfigure}%
+}
+\caption{Time series of the multispectral ANN-based MLPC algorithm}\label{fig04}
+\end{figure}
+
+\section{Conclusion}
+
+This work demonstrated the examples of the supervised training in ML approaches to geospatial applications. The research evaluated ML algorithms of image classification for improved workflow of image processing and tested their applicability in cartographic works. Four algorithms of ML supervised training were compared using GRASS GIS modules that are based Python's library Scikit-Learn. Based on the maps generated from the processed Landsat satellite images, four distinct ML approaches of GRASS GIS were compared both for mathematical foundation and graphical output. 
+
+Geospatial datasets are important information source for analysis of landscape dynamics. Using spaceborne data enables to model biodiversity changes in a long-term scale. Such time series analysis enables to compare current and previous state of the landscapes using cartographic data analysis and visualization which can be used for environmental monitoring, assessment of forest health and prognosis of possible further development in the near future. Landscape dynamics includes a complexity of both human-induced and climate-related processes including land abandonment as its major side effect. Landscape dynamics is triggered by a consequence of the expansion of forest area and the habitat homogenization. Early detection of land cover changes as parts of landscape needs a timely recognition of subtle changes in the forests and involves fieldwork monitoring. One of the important approaches for identification landscape dynamics in land cover types is the analysis of changes and the rate of exposure of landscapes to climate and environmental effects using multi-temporal geospatial data. 
+
+The consequences of various ML parameters on the cartographic outputs are analysed in this work, such as speed and accuracy, randomness of nodes, analytical determination of the output weights, and dependence distribution of pixels for each algorithm. Supervised learning models of GRASS GIS were tested and compared. The results shown that the most time-consuming algorithms was noted as SVC classification, while the fastest results were achieved by the Decision Tree approach to image processing and the best results are achieved by RF Classifier. Though each algorithms was developed to serve different objectives of ML applications in RS data processing, their technical implementation and practical purposes present valuable approaches to cartographic data processing and image analysis. 
+
+To conclude, the ML applications can be effectively used for environmental monitoring and forest mapping. Using ML approach, the automation of geospatial data processing increases according to the choice of diverse ML instruments. The particular case of this work presented an example of the ML modules of GRASS GIS to process the multispectral Landsat images. Several algorithms of ML were tested and compared for visualization of landscapes using image partition into land cover classes automatically. The effectiveness of the remote sensing (RS) data for environmental forest monitoring is explained by the optical properties of satellite images: the features of land cover types on the Earth have different spectral reflectance values. This enables to identify them using digital signatures of the satellite images. Time series analysis of such scenes enables to detect changes and recognise modified patches within the landscape structure. Therefore, extraction of these features from the RS signals recorded during the Earth monitoring from space missions (such as Landsat) provides an essential tool to detect landscape dynamics. 
+
+
+%% If you have bibdatabase file and want bibtex to generate the
+%% bibitems, please use
+%%
+%%  \bibliographystyle{elsarticle-harv} 
+%%  \bibliography{<your bibdatabase>}
+
+%% else use the following coding to input the bibitems directly in the
+%% TeX file.
+
+\begin{thebibliography}{00}
+
+%% \bibitem[Author(year)]{label}
+%% Text of bibliographic item
+
+\bibitem[ ()]{}
+
+\end{thebibliography}
+\end{document}
+
+\endinput
+%%
+%% End of file `elsarticle-template-harv.tex'.
